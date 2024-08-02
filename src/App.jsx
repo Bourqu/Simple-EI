@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import Employment from './Employment';
 import QualifyingPeriod from './QualifyingPeriod';
 
-
 const App = () => {
     const [postalCode, setPostalCode] = useState('');
     const [responseData, setResponseData] = useState(null);
     const [error, setError] = useState(null);
+    const [earliestDate, setEarliestDate] = useState(new Date());
 
     const handlePostalCodeChange = (e) => {
         setPostalCode(e.target.value);
@@ -60,11 +60,12 @@ const App = () => {
                 </label>
                 <button type="submit">Submit</button>
             </form>
-            
-            {responseData && <QualifyingPeriod responseData={responseData}/>}
             {error && <p>{error}</p>}
             {responseData && (
-                <Employment responseData={responseData} />
+                <div>
+                    <QualifyingPeriod setEarliestDate={setEarliestDate} />
+                    <Employment responseData={responseData} earliestDate={earliestDate} />
+                </div>
             )}
         </div>
     );

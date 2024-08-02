@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-const Employment = ({ responseData }) => {
+const Employment = ({ responseData, earliestDate }) => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const calculateTotalHours = (startDate, endDate, weeklyHours) => {
@@ -11,14 +12,11 @@ const Employment = ({ responseData }) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
         const weeks = Math.ceil((end - start) / (1000 * 60 * 60 * 24 * 7));
-        console.log(weeks)
         return weeks * weeklyHours;
     };
 
-    const checkEligibility = () => {
-        const startDate = watch('startDate');
-        const endDate = watch('endDate');
-        const weeklyHours = watch('weeklyHours');
+    const checkEligibility = (data) => {
+        const { startDate, endDate, weeklyHours } = data;
 
         if (responseData && responseData.length > 0) {
             const requiredHours = responseData[0].insured_hours_required;
@@ -70,6 +68,7 @@ const Employment = ({ responseData }) => {
                     <input
                         type="date"
                         name="startDate"
+                        defaultValue={earliestDate.toISOString().split('T')[0]}
                         {...register("startDate", { required: 'Start date is required.' })}
                     />
                     {errors.startDate && <p>{errors.startDate.message}</p>}
@@ -91,14 +90,14 @@ const Employment = ({ responseData }) => {
                         {...register("weeklyHours", {
                             required: 'Weekly hours worked is required.',
                             min: { value: 1, message: 'Weekly hours must be at least 1.' },
-                            max: { value: 168, message: 'Weekly hours cannot exceed 168.' }
+                            max: { value: 60, message: 'Weekly hours cannot exceed 60.' }
                         })}
                     />
                     {errors.weeklyHours && <p>{errors.weeklyHours.message}</p>}
                 </label>
                 <button type="submit">Check Eligibility</button>
             </form>
-            <div>{checkEligibility()}</div>
+            <div>{checkEligibility(watch())}</div>
             <div>{createTableFromData(responseData)}</div>
         </div>
     );
