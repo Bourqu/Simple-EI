@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Employment from './Employment';
+import QualifyingPeriod from './QualifyingPeriod';
+
 
 const App = () => {
     const [postalCode, setPostalCode] = useState('');
@@ -58,6 +60,8 @@ const App = () => {
                 </label>
                 <button type="submit">Submit</button>
             </form>
+            
+            {responseData && <QualifyingPeriod responseData={responseData}/>}
             {error && <p>{error}</p>}
             {responseData && (
                 <Employment responseData={responseData} />

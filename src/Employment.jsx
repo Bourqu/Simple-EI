@@ -11,6 +11,7 @@ const Employment = ({ responseData }) => {
         const start = new Date(startDate);
         const end = new Date(endDate);
         const weeks = Math.ceil((end - start) / (1000 * 60 * 60 * 24 * 7));
+        console.log(weeks)
         return weeks * weeklyHours;
     };
 
