@@ -3,13 +3,11 @@ import { useForm } from 'react-hook-form';
 
 const YesNoWithDate = ({...props}) =>{
     const [showDate, setShowDate]=useState(false)
-    const [selectedDate, setSelectedDate] = useState(false)
 
     const handleOptionChange = (e) => {
         const value = e.target.value==='yes'
-        setShowDate(value);
-        if(!value) setSelectedDate('')
-    };
+        setShowDate(value);}
+        
 
 
     return (
@@ -44,7 +42,8 @@ const YesNoWithDate = ({...props}) =>{
 
 
 
-
+//this need ot be correct to jsut block the user from adding a > 1yr date in the form
+//as we did with react forms on the Emp page.
 
 const QualifyingPeriod = ({ ...props }) => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
@@ -60,7 +59,6 @@ const QualifyingPeriod = ({ ...props }) => {
             props.setEarliestDate(applicationDate);
 
             //we jsut need to set this as the ealriest date and not 52 weeks here.
-            console.log(props.earliestDate)
 
             return ` Window begins at ${props.earliestDate}.`;
         } 
@@ -69,7 +67,6 @@ const QualifyingPeriod = ({ ...props }) => {
         
         else {
             props.setEarliestDate(currentDate.setFullYear(currentDate.getFullYear()-1));
-            console.log(props.earliestDate)
             return `Window begins at ${props.earliestDate};`
         }
     };
