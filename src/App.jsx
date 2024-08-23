@@ -4,13 +4,14 @@ import QualifyingPeriod from './QualifyingPeriod';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./App.css"
+import YesNoWithDate from './QualifyingPeriod';
 
 
 const App = () => {
     const [postalCode, setPostalCode] = useState('');
     const [responseData, setResponseData] = useState(null);
     const [error, setError] = useState(null);
-    const [earliestDate, setEarliestDate] = useState(new Date());
+    const [earliestDate, setEarliestDate] = useState(new Date())
 
     const handlePostalCodeChange = (e) => {
         setPostalCode(e.target.value);
@@ -67,7 +68,7 @@ const App = () => {
             {error && <p>{error}</p>}
             {responseData && (
                 <div>
-                    <QualifyingPeriod setEarliestDate={setEarliestDate} />
+                    <YesNoWithDate  earliestDate= {earliestDate} setEarliestDate={setEarliestDate} />
                     <Employment responseData={responseData} earliestDate={earliestDate} />
                 </div>
             )}

@@ -68,8 +68,11 @@ const Employment = ({ responseData, earliestDate }) => {
                     <input
                         type="date"
                         name="startDate"
-                        defaultValue={earliestDate.toISOString().split('T')[0]}
-                        {...register("startDate", { required: 'Start date is required.' })}
+                        {...register("startDate", {
+                            required: 'Start date is required.',
+                            valueAsDate: true,
+                            validate: value => value >= earliestDate || 'Start date must be after last EI Application date'
+                        })}
                     />
                     {errors.startDate && <p>{errors.startDate.message}</p>}
                 </label>

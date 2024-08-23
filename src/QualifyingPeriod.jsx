@@ -1,7 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const QualifyingPeriod = ({ setEarliestDate }) => {
+const YesNoWithDate = ({...props}) =>{
+    const [showDate, setShowDate]=useState(false)
+    const [selectedDate, setSelectedDate] = useState(false)
+
+    const handleOptionChange = (e) => {
+        const value = e.target.value==='yes'
+        setShowDate(value);
+        if(!value) setSelectedDate('')
+    };
+
+
+    return (
+    <div>
+      <label>
+        <input
+          type="radio"
+          name="yesNoOption"
+          value="yes"
+          onChange={handleOptionChange}
+        />
+        Yes
+      </label>
+      <label>
+        <input
+          type="radio"
+          name="yesNoOption"
+          value="no"
+          onChange={handleOptionChange}
+        />
+        No
+      </label>
+
+      {showDate && <QualifyingPeriod {...props}/>
+        
+      }
+    </div>
+  );
+
+
+}
+
+
+
+
+
+const QualifyingPeriod = ({ ...props }) => {
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const calculatePeriod = (data) => {
@@ -12,11 +57,20 @@ const QualifyingPeriod = ({ setEarliestDate }) => {
         const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24*7));
 
         if (diffWeeks <= 52) {
-            setEarliestDate(applicationDate);
-            return `Not eligible for EI yet because you have applied ${diffWeeks} weeks ago. You need to accumulate more hours since ${appDate}.`;
-        } else {
-            setEarliestDate(currentDate);
-            return 'You are eligible to apply for EI. You have 52 weeks to accumulate the required hours.';
+            props.setEarliestDate(applicationDate);
+
+            //we jsut need to set this as the ealriest date and not 52 weeks here.
+            console.log(props.earliestDate)
+
+            return ` Window begins at ${props.earliestDate}.`;
+        } 
+        
+        
+        
+        else {
+            props.setEarliestDate(currentDate.setFullYear(currentDate.getFullYear()-1));
+            console.log(props.earliestDate)
+            return `Window begins at ${props.earliestDate};`
         }
     };
 
@@ -27,6 +81,7 @@ const QualifyingPeriod = ({ setEarliestDate }) => {
 
     return (
         <div>
+            
             <form onSubmit={handleSubmit(onSubmit)}>
                 <label>
                     Have you applied for EI in the last 52 weeks?
@@ -43,4 +98,4 @@ const QualifyingPeriod = ({ setEarliestDate }) => {
     );
 };
 
-export default QualifyingPeriod;
+export default YesNoWithDate;
