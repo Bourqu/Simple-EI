@@ -51,25 +51,9 @@ const QualifyingPeriod = ({ ...props }) => {
     const calculatePeriod = (data) => {
         const { appDate } = data;
         const applicationDate = new Date(appDate);
-        const currentDate = new Date();
-        const diffTime = Math.abs(currentDate - applicationDate);
-        const diffWeeks = Math.ceil(diffTime / (1000 * 60 * 60 * 24*7));
-
-        if (diffWeeks <= 52) {
-            props.setEarliestDate(applicationDate);
-
-            //we jsut need to set this as the ealriest date and not 52 weeks here.
-
-            return ` Window begins at ${props.earliestDate}.`;
-        } 
-        
-        
-        
-        else {
-            props.setEarliestDate(currentDate.setFullYear(currentDate.getFullYear()-1));
-            return `Window begins at ${props.earliestDate};`
+          props.setEarliestDate(applicationDate);
+      
         }
-    };
 
     const onSubmit = (data) => {
         const result = calculatePeriod(data);
@@ -85,7 +69,11 @@ const QualifyingPeriod = ({ ...props }) => {
                     <input
                         type="date"
                         name="appDate"
-                        {...register("appDate", { required: 'Application date is required.' })}
+                        {...register("appDate", {
+                            required: 'App date is required.',
+                            valueAsDate: true,
+                            validate: Math.ceil(Math.abs(new Date - value))/(1000*60*60*24*7)<=52  || 'Only include EI applciations within the last 52 weeks'
+                        })}
                     />
                     {errors.appDate && <p>{errors.appDate.message}</p>}
                 </label>
