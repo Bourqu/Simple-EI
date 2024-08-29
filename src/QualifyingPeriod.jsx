@@ -72,7 +72,7 @@ const QualifyingPeriod = ({ ...props }) => {
                         {...register("appDate", {
                             required: 'App date is required.',
                             valueAsDate: true,
-                            validate: Math.ceil(Math.abs(new Date - value))/(1000*60*60*24*7)<=52  || 'Only include EI applciations within the last 52 weeks'
+                            validate: value => Math.ceil(Math.abs(new Date - value))/(1000*60*60*24)<367  || 'Only include EI applciations within the last 52 weeks'
                         })}
                     />
                     {errors.appDate && <p>{errors.appDate.message}</p>}
